@@ -88,6 +88,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
 }
 
+
 kotlin {
     android('android') {
         publishLibraryVariants("release", "debug")
@@ -156,17 +157,23 @@ dokka {
         path = kotlin.sourceSets.jvmMain.kotlin.srcDirs[0]
         platforms = ["jvm"]
     }
-}
 
-
-configurations {
-    published
+    sourceRoot {
+        // assuming there is only a single source dir...
+        path = kotlin.sourceSets.androidMain.kotlin.srcDirs[0]
+        platforms = ["android"]
+    }
 }
 
 task dokkaJar(type: Jar) {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
     description = "Assembles Kotlin docs with Dokka"
     archiveClassifier = "javadoc"
+    from tasks.dokka
+}
+
+configurations {
+    published
 }
 
 artifactoryPublish {
@@ -185,13 +192,25 @@ task jvmMainSourceJar(type: Jar) {
 project.afterEvaluate {
     publishing {
         publications {
+
             jvmPublication(MavenPublication) {
                 groupId group
                 version = version
 
                 artifact jvmJar
-                artifact jvmMainSourceJar
+                artifact jvmSourcesJar
                 artifact dokkaJar
+            }
+
+            androidDebugPublication(MavenPublication) {
+                groupId group
+                version = version
+                artifactId = 'hexutilslib-android-debug'
+
+                artifact dokkaJar
+                artifact androidDebugSourcesJar
+                artifact bundleDebugAar
+
             }
         }
     }
@@ -211,12 +230,11 @@ artifactory {
         }
         defaults {
 
-//            publications('androidDebug', 'androidRelease', 'jvmPublication')
-            publications('jvmPublication')
+            publications('androidDebugPublication', 'androidRelease', 'jvmPublication')
 
             publishConfigs('jars', 'published')
 
-            publishBuildInfo = true   //Publish build-info to Artifactory (true by default)
+            publishBuildInfo = false   //Publish build-info to Artifactory (true by default)
             publishArtifacts = true   //Publish artifacts to Artifactory (true by default)
             publishPom = true   //Publish generated POM files to Artifactory (true by default).
             publishIvy = false   //Publish generated Ivy descriptor files to Artifactory (true by default).
