@@ -1,0 +1,236 @@
+buildscript {
+
+    ext {
+        ext.kotlin_version = '1.3.41'
+
+        // Artifactory Gradle Plugin Version
+        // see https://bintray.com/jfrog/jfrog-jars/build-info-extractor-gradle for latest version
+        artifactory_version = '4.9.1'
+    }
+
+    repositories {
+        jcenter()
+        google()
+        maven { url "https://kotlin.bintray.com/kotlinx" }
+        mavenLocal()
+    }
+
+    dependencies {
+
+        classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:0.9.18"
+
+        // Kotlin multi platform serialization
+        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
+
+        // Kotlin multi platform serialization
+        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
+
+        // Artifactory Upload
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:$artifactory_version"
+    }
+
+    println(com.ingonoka.gradle.BuildConfig.describe())
+}
+
+plugins {
+    id 'org.jetbrains.kotlin.multiplatform' version '1.3.50'
+//    id 'org.jetbrains.dokka' version '0.9.18'
+}
+
+repositories {
+    google()
+    jcenter()
+    mavenCentral()
+}
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'org.jetbrains.dokka-android'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.artifactory'
+
+
+version = com.ingonoka.gradle.BuildConfig.versionName()
+group = com.ingonoka.gradle.BuildConfig.group
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        minSdkVersion 23
+        targetSdkVersion 28
+        versionCode 1
+        versionName '1.0'
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+        debug {
+            minifyEnabled false
+        }
+    }
+
+//    productFlavors {
+//    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        debug.java.srcDirs += 'src/main/kotlin'
+        release.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+}
+
+kotlin {
+    android('android') {
+        publishLibraryVariants("release", "debug")
+    }
+
+    jvm() {
+
+    }
+
+    println(targets.names)
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation kotlin('stdlib-common')
+            }
+        }
+        commonTest {
+            dependencies {
+                implementation kotlin('test-common')
+                implementation kotlin('test-annotations-common')
+            }
+        }
+        androidMain {
+            dependencies {
+                implementation kotlin('stdlib')
+            }
+        }
+        androidTest {
+            dependencies {
+                implementation kotlin('test')
+                implementation kotlin('test-junit')
+            }
+        }
+        // Default source set for JVM-specific sources and dependencies.
+        jvmMain {
+            dependencies {
+                implementation kotlin('stdlib-jdk8')
+            }
+        }
+        // JVM-specific tests and their dependencies:
+        jvmTest {
+            dependencies {
+                implementation kotlin('test-junit')
+            }
+        }
+    }
+}
+
+dokka {
+    outputFormat = 'html'
+    includes = ['src/commonMain/kotlin/com/ingonoka/hexutils/module.md']
+    impliedPlatforms = ["Common"] // This will force platform tags for all non-common sources e.g. "JVM"
+    kotlinTasks {
+        // dokka fails to retrieve sources from MPP-tasks so they must be set empty to avoid exception
+        // use sourceRoot instead (see below)
+        []
+    }
+    sourceRoot {
+        // assuming there is only a single source dir...
+        path = kotlin.sourceSets.commonMain.kotlin.srcDirs[0]
+        platforms = ["Common"]
+    }
+    sourceRoot {
+        // assuming there is only a single source dir...
+        path = kotlin.sourceSets.jvmMain.kotlin.srcDirs[0]
+        platforms = ["jvm"]
+    }
+}
+
+
+configurations {
+    published
+}
+
+task dokkaJar(type: Jar) {
+    group = JavaBasePlugin.DOCUMENTATION_GROUP
+    description = "Assembles Kotlin docs with Dokka"
+    archiveClassifier = "javadoc"
+}
+
+artifactoryPublish {
+    dependsOn dokkaJar
+}
+
+artifacts {
+    published dokkaJar
+}
+
+task jvmMainSourceJar(type: Jar) {
+    from kotlin.sourceSets.jvmMain.kotlin.srcDirs
+    archiveClassifier = "sources"
+}
+
+project.afterEvaluate {
+    publishing {
+        publications {
+            jvmPublication(MavenPublication) {
+                groupId group
+                version = version
+
+                artifact jvmJar
+                artifact jvmMainSourceJar
+                artifact dokkaJar
+            }
+        }
+    }
+}
+
+artifactory {
+    contextUrl = 'http://209.97.175.64:8081/artifactory'
+
+    publish {
+        repository {
+            repoKey = com.ingonoka.gradle.BuildConfig.artifactoryRepoKey
+            username = "${artifactory_username}"
+            password = "${artifactory_password}"
+            maven = true
+
+
+        }
+        defaults {
+
+//            publications('androidDebug', 'androidRelease', 'jvmPublication')
+            publications('jvmPublication')
+
+            publishConfigs('jars', 'published')
+
+            publishBuildInfo = true   //Publish build-info to Artifactory (true by default)
+            publishArtifacts = true   //Publish artifacts to Artifactory (true by default)
+            publishPom = true   //Publish generated POM files to Artifactory (true by default).
+            publishIvy = false   //Publish generated Ivy descriptor files to Artifactory (true by default).
+        }
+
+    }
+
+    resolve {
+        repository {
+            repoKey = com.ingonoka.gradle.BuildConfig.artifactoryRepoKey
+            username = "${artifactory_username}"
+            password = "${artifactory_password}"
+            maven = true
+
+        }
+    }
+}
