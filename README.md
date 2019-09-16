@@ -157,7 +157,7 @@ This software is considered **Beta**.
 
 ## Contact
 
-This project is maintained by [Ingo Noka](link:https://github.com/ingonoka)
+This project is maintained by [Ingo Noka](https://github.com/ingonoka)
 
 
 ## License
