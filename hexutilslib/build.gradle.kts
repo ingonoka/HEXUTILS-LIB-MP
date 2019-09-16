@@ -2,6 +2,7 @@
 
 import com.ingonoka.gradle.ArtifactoryConfig
 import com.ingonoka.gradle.BuildConfig
+import com.ingonoka.gradle.PomConfig
 import groovy.lang.GroovyObject
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.dokka.gradle.SourceRoot
@@ -167,13 +168,13 @@ kotlin.targets.forEach {
         pom {
             developers {
                 developer {
-                    name.set(developerName)
+                    name.set(PomConfig.developer)
                 }
             }
             licenses {
                 license {
-                    name.set("Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)")
-                    url.set("https://creativecommons.org/licenses/by-nc-nd/4.0/")
+                    name.set(PomConfig.licenseName)
+                    url.set(PomConfig.licenseUrl)
                 }
             }
         }
