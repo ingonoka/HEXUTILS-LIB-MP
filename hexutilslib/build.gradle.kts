@@ -1,12 +1,12 @@
 @file:Suppress("UnstableApiUsage")
 
+import com.ingonoka.gradle.ArtifactoryConfig
 import com.ingonoka.gradle.BuildConfig
 import groovy.lang.GroovyObject
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.dokka.gradle.SourceRoot
 import org.jfrog.gradle.plugin.artifactory.dsl.PublisherConfig
 import org.jfrog.gradle.plugin.artifactory.dsl.ResolverConfig
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 repositories {
     google()
@@ -53,7 +53,6 @@ dependencies {
     implementation(fileTree("libs") {
         include("*.jar")
     })
-    implementation(kotlin("stdlib-jdk8"))
 }
 
 
@@ -115,7 +114,7 @@ tasks {
         outputFormat = "html"
         includes = listOf("src/commonMain/kotlin/com/ingonoka/hexutils/module.md")
         kotlinTasks { listOf() }
-        sourceRoots = mutableListOf<SourceRoot>()
+        sourceRoots = mutableListOf()
 
         println("Dokka source directories =>")
         kotlin.sourceSets.forEach { sourceSet ->
@@ -176,12 +175,12 @@ artifactory {
         repository(delegateClosureOf<GroovyObject> {
 
             setProperty("repoKey", repoKey)
-            setProperty("username", project.findProperty("artifactory_username") ?: "nouser")
-            setProperty("password", project.findProperty("artifactory_password") ?: "nopass")
+            setProperty("username", ArtifactoryConfig.userName )
+            setProperty("password", ArtifactoryConfig.password )
             setProperty("maven", true)
         })
         defaults(delegateClosureOf<GroovyObject> {
-                invokeMethod("publications", publishing.publications.names.toTypedArray())
+            invokeMethod("publications", publishing.publications.names.toTypedArray())
         })
     })
 
