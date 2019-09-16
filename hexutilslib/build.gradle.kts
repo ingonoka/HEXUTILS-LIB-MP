@@ -181,6 +181,7 @@ artifactory {
         })
         defaults(delegateClosureOf<GroovyObject> {
             invokeMethod("publications", publishing.publications.names.toTypedArray())
+            setProperty("publishIvy", false)
         })
     })
 
