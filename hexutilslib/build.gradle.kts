@@ -62,16 +62,6 @@ dependencies {
 kotlin {
     android {
         publishLibraryVariants("debug", "release")
-
-//        val debug by compilations.getting {
-//            kotlinOptions {
-//                // Setup the Kotlin compiler options for the 'main' compilation:
-//                jvmTarget = "1.8"
-//            }
-//
-//            compileKotlinTask // get the Kotlin task 'compileKotlinJvm'
-//            output // get the main compilation output
-//        }
     }
 
     jvm {
@@ -202,5 +192,8 @@ artifactory {
 
     resolve(delegateClosureOf<ResolverConfig> {
         setProperty("repoKey", repoKey)
+        setProperty("username", ArtifactoryConfig.userName)
+        setProperty("password", ArtifactoryConfig.password)
+        setProperty("maven", true)
     })
 }
