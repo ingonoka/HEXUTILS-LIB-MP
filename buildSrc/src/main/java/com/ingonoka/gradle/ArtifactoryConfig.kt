@@ -7,4 +7,12 @@ object ArtifactoryConfig {
 
     @JvmStatic
     val password = "AP36i5WZAqnFjDdzAs3dmNDSYhEpUterfjmopx"
+
+    @JvmStatic
+    fun describe(): String {
+        return """
+            |Artifactory Configuration:
+            |   User Name:             $userName
+        """.trimMargin()
+    }
 }

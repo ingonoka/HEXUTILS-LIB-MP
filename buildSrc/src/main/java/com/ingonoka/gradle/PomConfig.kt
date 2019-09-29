@@ -10,4 +10,15 @@ object PomConfig {
 
     @JvmStatic
     val licenseUrl = "https://creativecommons.org/licenses/by-nc-nd/4.0/"
+
+
+    @JvmStatic
+    fun describe(): String {
+        return """
+            |Pom Configuration:
+            |   Developer:             $developer
+            |   License:               $licenseName
+            |   License URL:           $licenseUrl
+        """.trimMargin()
+    }
 }

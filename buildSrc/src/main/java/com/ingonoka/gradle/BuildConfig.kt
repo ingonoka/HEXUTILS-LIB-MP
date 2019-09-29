@@ -112,18 +112,16 @@ object BuildConfig {
     @JvmStatic
     fun describe(): String {
         return """
-            |Build Configuration
-            |===============================================
-            |Debug:                 $isDebug
-            |Snapshot:              $isSnapshot
-            |Long version:          $longVersionName
-            |Short version:         $shortVersionName
-            |-----
-            |Group:                 $group
-            |Version:               ${versionName()}
-            |Version Code:          ${versionCode()}
-            |Artifactory Repo key   ${artifactoryRepoKey}
-            |================================================
+            |Build Configuration:
+            |   Debug:                 $isDebug
+            |   Snapshot:              $isSnapshot
+            |   Long version:          $longVersionName
+            |   Short version:         $shortVersionName
+            |   -----
+            |   Group:                 $group
+            |   Version:               ${versionName()}
+            |   Version Code:          ${versionCode()}
+            |   Artifactory Repo key   ${artifactoryRepoKey}
         """.trimMargin()
     }
 }
