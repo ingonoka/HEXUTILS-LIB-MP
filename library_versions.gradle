@@ -23,7 +23,7 @@ qrsvlibjvmreleaseVersion = "v0.4-12-g5bfdebb"
 qcatlightjvmVersion = "v0.3-4-g6479929"
 qcatlightandroidVersion = "v0.3-4-g6479929"
 qcatlightandroiddebugVersion = "v0.3-4-g6479929"
-describe = { """Library versions:
+printVersions = """Library versions:
     hexutilslib:                 	v1.0_RC2
     bertlvlib:                   	v1.0_RC4-8-g9a0a610
     utilslib:                    	v1.1-10-g143843b
@@ -46,7 +46,6 @@ describe = { """Library versions:
     qcatlightjvm:                	v0.3-4-g6479929
     qcatlightandroid:            	v0.3-4-g6479929
     qcatlightandroiddebug:       	v0.3-4-g6479929 """
-}
 }
 /*
 implementation "com.ingonoka:hexutilslib:$hexutilslibVersion"

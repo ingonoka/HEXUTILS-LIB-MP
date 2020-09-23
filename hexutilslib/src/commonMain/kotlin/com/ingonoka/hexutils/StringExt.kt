@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2020. Ingo Noka
+ * This file belongs to project HEXUTILS-LIB-MP.
+ * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter to
+ * Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+ *
+ */
+
 package com.ingonoka.hexutils
 
 /**
@@ -22,10 +31,13 @@ fun String.hexToBytes(removeSpace: Boolean = false): ByteArray {
 
     require (hexNoSpace.length % 2 == 0) { "Only conversion of strings with even length supported: $this" }
 
-    hexNoSpace.chunked(2).forEachIndexed { i, chunk ->
-        if (chunk.length == 2) res[i] = chunk.hexToByte()
-    }
+//    hexNoSpace.chunked(2).forEachIndexed { i, chunk -> res[i] = hexMap[chunk]!! }
 
+    var i = 0
+    while(i * 2 < hexNoSpace.length) {
+        res[i] = hexMap[hexNoSpace.substring(i*2, (i*2)+2)]!!
+        i++
+    }
     return res
 }
 
@@ -36,4 +48,43 @@ fun String.hexToBytes(removeSpace: Boolean = false): ByteArray {
  * a hex character
  *
  */
-fun String.hexToByte(): Byte = this.take(2).toInt(16).toByte()
+fun String.hexToByte(): Byte = hexMap[this]!!
+
+val hexMap = hashMapOf<String, Byte>(
+    "0" to 0, "1" to 1, "2" to 2, "3" to 3, "4" to 4, "5" to 5, "6" to 6, "7" to 7, "8" to 8, "9" to 9,
+    "A" to 10, "B" to 11, "C" to 12, "D" to 13, "E" to 14, "F" to 15,
+    
+    "00" to 0, "01" to 1, "02" to 2, "03" to 3, "04" to 4, "05" to 5, "06" to 6, "07" to 7, "08" to 8, "09" to 9,
+    "0A" to 10, "0B" to 11, "0C" to 12, "0D" to 13, "0E" to 14, "0F" to 15, 
+    
+    "10" to 16, "11" to 17, "12" to 18,
+    "13" to 19, "14" to 20, "15" to 21, "16" to 22, "17" to 23, "18" to 24, "19" to 25, "1A" to 26, "1B" to 27,
+    "1C" to 28, "1D" to 29, "1E" to 30, "1F" to 31, "20" to 32, "21" to 33, "22" to 34, "23" to 35, "24" to 36,
+    "25" to 37, "26" to 38, "27" to 39, "28" to 40, "29" to 41, "2A" to 42, "2B" to 43, "2C" to 44, "2D" to 45,
+    "2E" to 46, "2F" to 47, "30" to 48, "31" to 49, "32" to 50, "33" to 51, "34" to 52, "35" to 53, "36" to 54,
+    "37" to 55, "38" to 56, "39" to 57, "3A" to 58, "3B" to 59, "3C" to 60, "3D" to 61, "3E" to 62, "3F" to 63,
+    "40" to 64, "41" to 65, "42" to 66, "43" to 67, "44" to 68, "45" to 69, "46" to 70, "47" to 71, "48" to 72,
+    "49" to 73, "4A" to 74, "4B" to 75, "4C" to 76, "4D" to 77, "4E" to 78, "4F" to 79, "50" to 80, "51" to 81,
+    "52" to 82, "53" to 83, "54" to 84, "55" to 85, "56" to 86, "57" to 87, "58" to 88, "59" to 89, "5A" to 90,
+    "5B" to 91, "5C" to 92, "5D" to 93, "5E" to 94, "5F" to 95, "60" to 96, "61" to 97, "62" to 98, "63" to 99,
+    "64" to 100, "65" to 101, "66" to 102, "67" to 103, "68" to 104, "69" to 105, "6A" to 106, "6B" to 107,
+    "6C" to 108, "6D" to 109, "6E" to 110, "6F" to 111, "70" to 112, "71" to 113, "72" to 114, "73" to 115,
+    "74" to 116, "75" to 117, "76" to 118, "77" to 119, "78" to 120, "79" to 121, "7A" to 122, "7B" to 123,
+    "7C" to 124, "7D" to 125, "7E" to 126, "7F" to 127,
+
+    "80" to -128, "81" to -127, "82" to -126, "83" to -125, "84" to -124, "85" to -123, "86" to -122, "87" to -121,
+    "88" to -120, "89" to -119, "8A" to -118, "8B" to -117, "8C" to -116, "8D" to -115, "8E" to -114, "8F" to -113,
+    "90" to -112, "91" to -111, "92" to -110, "93" to -109, "94" to -108, "95" to -107, "96" to -106, "97" to -105,
+    "98" to -104, "99" to -103, "9A" to -102, "9B" to -101, "9C" to -100, "9D" to -99, "9E" to -98, "9F" to -97,
+    "A0" to -96, "A1" to -95, "A2" to -94, "A3" to -93, "A4" to -92, "A5" to -91, "A6" to -90, "A7" to -89, "A8" to -88,
+    "A9" to -87, "AA" to -86, "AB" to -85, "AC" to -84, "AD" to -83, "AE" to -82, "AF" to -81, "B0" to -80, "B1" to -79,
+    "B2" to -78, "B3" to -77, "B4" to -76, "B5" to -75, "B6" to -74, "B7" to -73, "B8" to -72, "B9" to -71, "BA" to -70,
+    "BB" to -69, "BC" to -68, "BD" to -67, "BE" to -66, "BF" to -65, "C0" to -64, "C1" to -63, "C2" to -62, "C3" to -61,
+    "C4" to -60, "C5" to -59, "C6" to -58, "C7" to -57, "C8" to -56, "C9" to -55, "CA" to -54, "CB" to -53, "CC" to -52,
+    "CD" to -51, "CE" to -50, "CF" to -49, "D0" to -48, "D1" to -47, "D2" to -46, "D3" to -45, "D4" to -44, "D5" to -43,
+    "D6" to -42, "D7" to -41, "D8" to -40, "D9" to -39, "DA" to -38, "DB" to -37, "DC" to -36, "DD" to -35, "DE" to -34,
+    "DF" to -33, "E0" to -32, "E1" to -31, "E2" to -30, "E3" to -29, "E4" to -28, "E5" to -27, "E6" to -26, "E7" to -25,
+    "E8" to -24, "E9" to -23, "EA" to -22, "EB" to -21, "EC" to -20, "ED" to -19, "EE" to -18, "EF" to -17, "F0" to -16,
+    "F1" to -15, "F2" to -14, "F3" to -13, "F4" to -12, "F5" to -11, "F6" to -10, "F7" to -9, "F8" to -8, "F9" to -7,
+    "FA" to -6, "FB" to -5, "FC" to -4, "FD" to -3, "FE" to -2, "FF" to -1
+)

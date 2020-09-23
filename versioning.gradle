@@ -1,4 +1,5 @@
 apply from: 'library_versions.gradle'
+apply from: 'library_versions_third_party.gradle'
 
 ext {
     group = 'com.ingonoka'

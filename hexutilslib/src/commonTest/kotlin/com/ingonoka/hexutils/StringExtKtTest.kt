@@ -1,5 +1,14 @@
-import com.ingonoka.hexutils.hexToByte
-import com.ingonoka.hexutils.hexToBytes
+/*
+ * Copyright (c) 2020. Ingo Noka
+ * This file belongs to project HEXUTILS-LIB-MP.
+ * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter to
+ * Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+ *
+ */
+
+package com.ingonoka.hexutils
+
 import kotlin.reflect.KClass
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -30,7 +39,8 @@ class StringExtKtTestJvm {
     @Test
     fun hexToBytes() {
 
-        assertTrue { assertArrayEquals(byteArrayOf(1, 2), "0102".hexToBytes()) }
+        assertTrue { assertArrayEquals(byteArrayOf(0, 1, 127), "00017F".hexToBytes()) }
+        assertTrue { assertArrayEquals(byteArrayOf(-128, -1), "80FF".hexToBytes()) }
 
         assertTrue(assertThrown(IllegalArgumentException::class) { "1".hexToBytes() })
 
@@ -42,8 +52,6 @@ class StringExtKtTestJvm {
     fun hexToByte() {
         assertEquals(1.toByte(), "01".hexToByte())
         assertEquals(1.toByte(), "1".hexToByte())
-        assertEquals(1.toByte(), "0103".hexToByte())
-        assertTrue(assertThrown(NumberFormatException::class) { "".hexToByte() })
     }
 }
 

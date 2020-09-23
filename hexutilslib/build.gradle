@@ -1,4 +1,13 @@
 
+/*
+ * Copyright (c) 2020. Ingo Noka
+ * This file belongs to project HEXUTILS-LIB-MP.
+ * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter to
+ * Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+ *
+ */
+
 plugins {
     id 'org.jetbrains.kotlin.multiplatform'
 }
@@ -23,18 +32,18 @@ repositories {
         allowInsecureProtocol = true
         url "http://209.97.175.64:8081/artifactory/libs-release-local"
         credentials {
-            username = "ingonoka"
-            password = "AP36i5WZAqnFjDdzAs3dmNDSYhEpUterfjmopx"
+            username = artifactory_user
+            password = artifactory_password
         }
     }
-    maven {
-        name = "utilslibPackages"
-        url = uri("https://maven.pkg.github.com/ingonoka/UTILD-LIB-MP")
-        credentials {
-            username = "ingonoka"
-            password = "b5c6a065568f3fbcff1d61c57dd76fbc5a3226f6"
-        }
-    }
+//    maven {
+//        name = "utilslibPackages"
+//        url = uri("https://maven.pkg.github.com/ingonoka/HEXUTILS-LIB-MP")
+//        credentials {
+//            username = "ingonoka"
+//            password = "b5c6a065568f3fbcff1d61c57dd76fbc5a3226f6"
+//        }
+//    }
 }
 
 version = getVersionName()
@@ -164,7 +173,7 @@ publishing {
         // tag::mavenRepository[]
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/ingonoka/hexutilslib")
+            url = uri("https://maven.pkg.github.com/ingonoka/HEXUTILS-LIB-MP")
             credentials {
                 username = github_username
                 password = github_password
