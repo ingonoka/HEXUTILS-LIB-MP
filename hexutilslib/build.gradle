@@ -47,7 +47,7 @@ repositories {
 }
 
 version = getVersionName()
-group = group
+group = domain
 
 android {
     compileSdkVersion 29
