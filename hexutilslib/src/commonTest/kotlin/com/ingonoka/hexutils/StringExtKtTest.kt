@@ -50,6 +50,11 @@ class StringExtKtTestJvm {
 
         assertTrue { assertArrayEquals(byteArrayOf(), "".hexToBytes()) }
 
+        assertArrayEquals(
+            byteArrayOf(0x5F, 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte()),
+            "0x5F, 0xFF, 0xFF, 0xFF".hexToBytes(true)
+        )
+
     }
 
     @Test
@@ -57,12 +62,34 @@ class StringExtKtTestJvm {
         assertEquals(1.toByte(), "01".hexToByte())
         assertEquals(1.toByte(), "1".hexToByte())
 
-        val hexChars = listOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'a', 'b', 'c', 'e', 'f')
+        val hexChars = listOf(
+            '0',
+            '1',
+            '2',
+            '3',
+            '4',
+            '5',
+            '6',
+            '7',
+            '8',
+            '9',
+            'A',
+            'B',
+            'C',
+            'D',
+            'E',
+            'F',
+            'a',
+            'b',
+            'c',
+            'e',
+            'f'
+        )
 
-        for(c1 in hexChars) {
-            assertEquals("$c1".toInt(16).toByte(),"$c1".hexToByte() )
-            for(c2 in hexChars) {
-                assertEquals("$c1$c2".toInt(16).toByte(),"$c1$c2".hexToByte() )
+        for (c1 in hexChars) {
+            assertEquals("$c1".toInt(16).toByte(), "$c1".hexToByte())
+            for (c2 in hexChars) {
+                assertEquals("$c1$c2".toInt(16).toByte(), "$c1$c2".hexToByte())
             }
         }
     }
