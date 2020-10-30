@@ -1,9 +1,10 @@
 // DO NOt EDIT
 // This file is created automatically by get-gradle-versions1.sh.
+// Last updated: Fri Oct 30 10:31:26 PST 2020
 ext {
-hexutilslibVersion = "v1.0_RC2"
-bertlvlibVersion = "v1.0_RC4-8-g9a0a610"
-utilslibVersion = "v1.1-10-g143843b"
+hexutilslibVersion = "v1.0_RC4-2-g3898b09"
+bertlvlightVersion = "v0.4"
+utilslibVersion = "v1.5"
 qcatlibVersion = "v1.5-7-g900b92a"
 escposlibVersion = "v0.1-15-g96f7b01"
 receiptprinterVersion = "v0.4-13-ga484029"
@@ -19,14 +20,14 @@ qrgeneratorVersion = "v0.2"
 qrvslibprotojvmreleaseVersion = "v0.0-47-gc488d09"
 qrvslibprotoandroidreleaseVersion = "v0.0-47-gc488d09"
 qrvslibprotoandroiddebugVersion = "v0.0-47-gc488d09"
-qrsvlibjvmreleaseVersion = "v0.4-12-g5bfdebb"
-qcatlightjvmVersion = "v0.3-4-g6479929"
-qcatlightandroidVersion = "v0.3-4-g6479929"
-qcatlightandroiddebugVersion = "v0.3-4-g6479929"
+qrsvlibjvmreleaseVersion = "v0.10"
+qcatlightjvmVersion = "v0.10"
+qcatlightandroidVersion = "v0.10"
+qcatlightandroiddebugVersion = "v0.10"
 printVersions = """Library versions:
-    hexutilslib:                 	v1.0_RC2
-    bertlvlib:                   	v1.0_RC4-8-g9a0a610
-    utilslib:                    	v1.1-10-g143843b
+    hexutilslib:                 	v1.0_RC4-2-g3898b09
+    bertlvlight:                 	v0.4
+    utilslib:                    	v1.5
     qcatlib:                     	v1.5-7-g900b92a
     escposlib:                   	v0.1-15-g96f7b01
     receiptprinter:              	v0.4-13-ga484029
@@ -42,14 +43,14 @@ printVersions = """Library versions:
     qrvslibprotojvmrelease:      	v0.0-47-gc488d09
     qrvslibprotoandroidrelease:  	v0.0-47-gc488d09
     qrvslibprotoandroiddebug:    	v0.0-47-gc488d09
-    qrsvlibjvmrelease:           	v0.4-12-g5bfdebb
-    qcatlightjvm:                	v0.3-4-g6479929
-    qcatlightandroid:            	v0.3-4-g6479929
-    qcatlightandroiddebug:       	v0.3-4-g6479929 """
+    qrsvlibjvmrelease:           	v0.10
+    qcatlightjvm:                	v0.10
+    qcatlightandroid:            	v0.10
+    qcatlightandroiddebug:       	v0.10 """
 }
 /*
 implementation "com.ingonoka:hexutilslib:$hexutilslibVersion"
-implementation "com.ingonoka:bertlvlib:$bertlvlibVersion"
+implementation "com.ingonoka:bertlvlight:$bertlvlightVersion"
 implementation "com.ingonoka:utilslib:$utilslibVersion"
 implementation "com.ingonoka:qcatlib:$qcatlibVersion"
 implementation "com.ingonoka:escposlib:$escposlibVersion"
