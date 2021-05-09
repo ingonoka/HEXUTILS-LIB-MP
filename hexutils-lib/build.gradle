@@ -1,0 +1,150 @@
+buildscript{
+    apply from: '../../common-versions/versions/versions_own.gradle'
+    apply from: '../../common-versions/versions/versions_external.gradle'
+}
+
+plugins {
+    id 'org.jetbrains.kotlin.multiplatform'
+    id 'com.android.library'
+    id 'maven-publish'
+    id 'org.asciidoctor.jvm.convert'
+    id 'com.jfrog.artifactory'
+    id 'org.jetbrains.dokka'
+}
+
+apply from: '../../common-versions/versioning.gradle'
+
+
+tasks.whenTaskAdded {task ->
+    if(task.name.contains("testReleaseUnitTest")) {
+        task.enabled = false
+    }
+    if(task.name.contains("testDebugUnitTest")) {
+        task.enabled = false
+    }
+}
+
+kotlin {
+    android {
+        publishLibraryVariants("release")
+        compilations.all {
+            kotlinOptions.jvmTarget = '1.8'
+        }
+    }
+
+    jvm {
+        compilations.all {
+            kotlinOptions.jvmTarget = '1.8'
+        }
+        testRuns["test"].executionTask.configure {
+            useJUnit()
+        }
+        jvmJar {
+            manifest {
+                attributes(
+                        'Implementation-Title': "hexutils lib",
+                        'Implementation-Version': getVersionName()
+                )
+            }
+        }
+    }
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+            }
+
+        }
+        commonTest {
+            dependencies {
+                implementation kotlin('test-common')
+                implementation kotlin('test-annotations-common')
+            }
+        }
+
+        androidMain {
+            dependencies {
+                implementation "org.slf4j:slf4j-api:$slf4j_version"
+            }
+        }
+
+        androidTest {
+            dependsOn androidAndroidTestRelease
+            dependencies {
+                implementation kotlin('test-junit')
+                implementation "junit:junit:$junit_version"
+            }
+        }
+
+        jvmMain {
+            dependencies {
+                implementation "com.google.protobuf:protobuf-java:$protobuf_java_version"
+            }
+
+        }
+
+        jvmTest {
+            dependencies {
+                implementation kotlin('test-junit')
+            }
+        }
+    }
+}
+
+// ./gradlew clean jvmTest --tests com.ingonoka.grpclogging.server.LogServerKtTest.startServerWithClientAuthenticationOptionalAndWait
+jvmTest {
+    testLogging.showStandardStreams = true
+}
+
+dependencies {
+    // This cannot go into the Kotlin block as androidTestImplementation is unknown there
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+}
+
+dokkaHtml {
+    outputDirectory = new File(buildDir, "dokka")
+    dokkaSourceSets {
+        jvmMain { // Or source set name, for single-platform the default source sets are `main` and `test`
+            moduleName = "Hex Utils lib JVM"
+            platform.set(org.jetbrains.dokka.Platform.jvm)
+        }
+
+        androidMain { // Or source set name, for single-platform the default source sets are `main` and `test`
+            moduleName = "Hex Utils lib Android"
+            platform.set(org.jetbrains.dokka.Platform.jvm)
+        }
+
+        commonMain {
+            moduleName = "Hex Utils lib Common"
+            platform.set(org.jetbrains.dokka.Platform.jvm)
+        }
+    }
+}
+
+
+android {
+    compileSdkVersion android_target_sdk_version.toInteger()
+    buildToolsVersion android_build_tools_version
+
+    defaultConfig {
+        minSdkVersion 23
+        targetSdkVersion android_target_sdk_version.toInteger()
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildTypes {
+        debug {
+            matchingFallbacks = ['release']
+        }
+    }
+    sourceSets {
+        androidTest {
+            java.srcDirs = ['src/androidTest/kotlin']
+            res.srcDirs = ['src/androidTest/res']
+        }
+    }
+}

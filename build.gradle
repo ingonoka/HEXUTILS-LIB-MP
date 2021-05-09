@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2020. Ingo Noka
  * This file belongs to project HEXUTILS-LIB-MP.
@@ -8,23 +7,14 @@
  *
  */
 
-buildscript {
-    apply from: 'versioning.gradle'
-
+buildscript{
+    apply from: '../common-versions/versions/versions_external.gradle'
     repositories {
         google()
-        jcenter()
         mavenCentral()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        } // for asciidoctor
-        maven {
-            url = 'https://dl.bintray.com/kotlin/dokka'
-        } // for dokka
     }
     dependencies {
-        //noinspection GradleDependency
-        classpath 'com.android.tools.build:gradle:3.6.3'
+        classpath 'com.android.tools.build:gradle:4.1.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}"
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokka_version"
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:$artifactory_version"
@@ -32,33 +22,67 @@ buildscript {
     }
 }
 
-repositories {
-    google()
-    jcenter()
-    mavenCentral()
 
+plugins {
+    id 'maven-publish'
+    id 'com.jfrog.artifactory' version "${artifactory_version}"
+    id 'org.asciidoctor.jvm.convert' version "$asciidoctor_version"
 }
 
-task showVersions() {
-    doLast {
-        println(printVersions)
-        println(printExternalLibraryVersions)
-    }
-}
+apply from: '../common-versions/versioning.gradle'
 
-task updateVersions(type: Exec) {
-    group = "Custom"
-    description = 'Updates the versions in LibraryVersions.kt'
-    commandLine '/usr/local/bin/bash', 'get-gradle-versions1.sh'
-    standardOutput = new ByteArrayOutputStream()
-
-    doLast {
-
-        def myFile = new File("library_versions.gradle")
-        if(myFile.exists()) {
-            myFile.delete()
-        }
-        myFile.createNewFile()
-        myFile.write(standardOutput.toString())
-    }
-}
+//
+//buildscript {
+//    apply from: 'versioning.gradle'
+//
+//    repositories {
+//        google()
+//        jcenter()
+//        mavenCentral()
+//        maven {
+//            url "https://plugins.gradle.org/m2/"
+//        } // for asciidoctor
+//        maven {
+//            url = 'https://dl.bintray.com/kotlin/dokka'
+//        } // for dokka
+//    }
+//    dependencies {
+//        //noinspection GradleDependency
+//        classpath 'com.android.tools.build:gradle:3.6.3'
+//        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}"
+//        classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokka_version"
+//        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:$artifactory_version"
+//        classpath "org.asciidoctor:asciidoctor-gradle-jvm:$asciidoctor_version"
+//    }
+//}
+//
+//repositories {
+//    google()
+//    jcenter()
+//    mavenCentral()
+//
+//}
+//
+//task showVersions() {
+//    doLast {
+//        println(printVersions)
+//        println(printExternalLibraryVersions)
+//    }
+//}
+//
+//task updateVersions(type: Exec) {
+//    group = "Custom"
+//    description = 'Updates the versions in LibraryVersions.kt'
+//    commandLine '/usr/local/bin/bash', 'get-gradle-versions1.sh'
+//    standardOutput = new ByteArrayOutputStream()
+//
+//    doLast {
+//
+//        def myFile = new File("library_versions.gradle")
+//        if(myFile.exists()) {
+//            myFile.delete()
+//        }
+//        myFile.createNewFile()
+//        myFile.write(standardOutput.toString())
+//    }
+//}
