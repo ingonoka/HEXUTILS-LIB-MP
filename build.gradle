@@ -14,7 +14,7 @@ buildscript{
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'com.android.tools.build:gradle:4.0.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}"
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokka_version"
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:$artifactory_version"
@@ -29,4 +29,4 @@ plugins {
     id 'org.asciidoctor.jvm.convert' version "$asciidoctor_version"
 }
 
-apply from: '../common-versions/versioning.gradle'
+//apply from: '../common-versions/versioning.gradle'

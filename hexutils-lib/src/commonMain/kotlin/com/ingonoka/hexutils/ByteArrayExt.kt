@@ -84,7 +84,7 @@ fun ByteArray.toHexChunked(indent: String = "", columns: Int = 16, lineNums: Boo
                     append("    ")
 
                     list.map { if (it in 0..31 || it in 128.toByte()..255.toByte()) 46 else it }
-                        .forEach { byte -> append(byte.toChar()) }
+                        .forEach { byte -> append(byte.toInt().toChar()) }
                 }
                 append('\n')
             }

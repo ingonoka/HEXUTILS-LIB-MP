@@ -14,113 +14,41 @@ plugins {
 
 apply from: '../../common-versions/versioning.gradle'
 
+//
+//tasks.whenTaskAdded {task ->
+//    if(task.name.contains("testReleaseUnitTest")) {
+//        task.enabled = false
+//    }
+//    if(task.name.contains("testDebugUnitTest")) {
+//        task.enabled = false
+//    }
+//}
 
-tasks.whenTaskAdded {task ->
-    if(task.name.contains("testReleaseUnitTest")) {
-        task.enabled = false
-    }
-    if(task.name.contains("testDebugUnitTest")) {
-        task.enabled = false
-    }
-}
-
-kotlin {
-    android {
-        publishLibraryVariants("release")
-        compilations.all {
-            kotlinOptions.jvmTarget = '1.8'
-        }
-    }
-
-    jvm {
-        compilations.all {
-            kotlinOptions.jvmTarget = '1.8'
-        }
-        testRuns["test"].executionTask.configure {
-            useJUnit()
-        }
-        jvmJar {
-            manifest {
-                attributes(
-                        'Implementation-Title': "hexutils lib",
-                        'Implementation-Version': getVersionName()
-                )
-            }
-        }
-    }
-
-    sourceSets {
-        commonMain {
-            dependencies {
-                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
-            }
-
-        }
-        commonTest {
-            dependencies {
-                implementation kotlin('test-common')
-                implementation kotlin('test-annotations-common')
-            }
-        }
-
-        androidMain {
-            dependencies {
-                implementation "org.slf4j:slf4j-api:$slf4j_version"
-            }
-        }
-
-        androidTest {
-            dependsOn androidAndroidTestRelease
-            dependencies {
-                implementation kotlin('test-junit')
-                implementation "junit:junit:$junit_version"
-            }
-        }
-
-        jvmMain {
-            dependencies {
-                implementation "com.google.protobuf:protobuf-java:$protobuf_java_version"
-            }
-
-        }
-
-        jvmTest {
-            dependencies {
-                implementation kotlin('test-junit')
-            }
-        }
-    }
-}
-
-// ./gradlew clean jvmTest --tests com.ingonoka.grpclogging.server.LogServerKtTest.startServerWithClientAuthenticationOptionalAndWait
-jvmTest {
-    testLogging.showStandardStreams = false
-}
 
 dependencies {
     // This cannot go into the Kotlin block as androidTestImplementation is unknown there
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
 }
-
-dokkaHtml {
-    outputDirectory = new File(buildDir, "dokka")
-    dokkaSourceSets {
-        jvmMain { // Or source set name, for single-platform the default source sets are `main` and `test`
-            moduleName = "Hex Utils lib JVM"
-            platform.set(org.jetbrains.dokka.Platform.jvm)
-        }
-
-        androidMain { // Or source set name, for single-platform the default source sets are `main` and `test`
-            moduleName = "Hex Utils lib Android"
-            platform.set(org.jetbrains.dokka.Platform.jvm)
-        }
-
-        commonMain {
-            moduleName = "Hex Utils lib Common"
-            platform.set(org.jetbrains.dokka.Platform.jvm)
-        }
-    }
-}
+//
+//dokkaHtml {
+//    outputDirectory = new File(buildDir, "dokka")
+//    dokkaSourceSets {
+//        jvmMain { // Or source set name, for single-platform the default source sets are `main` and `test`
+//            moduleName = "Hex Utils lib JVM"
+//            platform.set(org.jetbrains.dokka.Platform.jvm)
+//        }
+//
+//        androidMain { // Or source set name, for single-platform the default source sets are `main` and `test`
+//            moduleName = "Hex Utils lib Android"
+//            platform.set(org.jetbrains.dokka.Platform.jvm)
+//        }
+//
+//        commonMain {
+//            moduleName = "Hex Utils lib Common"
+//            platform.set(org.jetbrains.dokka.Platform.jvm)
+//        }
+//    }
+//}
 
 
 android {
@@ -137,27 +65,84 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     buildTypes {
-        debug {
-            matchingFallbacks = ['release']
-        }
+        release { }
+//        debug { }
     }
     sourceSets {
         main {
-            manifest.srcFile 'src/androidMain/AndroidManifest.xml'
-            java.srcDirs = ['src/androidMain/kotlin']
-            res.srcDirs = ['src/androidMain/res']
+            manifest.srcFile 'src/main/AndroidManifest.xml'
+//            java.srcDirs = ['src/main/java']
+//            res.srcDirs = ['src/main/res']
         }
-        androidTest {
-            manifest.srcFile 'src/androidTest/AndroidManifest.xml'
-            java.srcDirs = ['src/androidTest/kotlin']
-            res.srcDirs = ['src/androidTest/res']
-        }
+//        androidTest {
+//            java.srcDirs = ['src/androidTest/java']
+//            res.srcDirs = ['src/androidTest/res']
+//        }
     }
 
-    android {
-        packagingOptions {
-            exclude("META-INF/*.kotlin_module")
-        }
+    packagingOptions {
+        exclude("META-INF/*.kotlin_module")
     }
-
 }
+
+kotlin {
+    android {
+        publishLibraryVariants("debug")
+        compilations.all {
+            kotlinOptions.jvmTarget = '1.8'
+        }
+    }
+
+    jvm {
+        compilations.all {
+            kotlinOptions.jvmTarget = '1.8'
+        }
+//        testRuns["test"].executionTask.configure {
+//            useJUnit()
+//        }
+        jvmJar {
+            manifest {
+                attributes(
+                        'Implementation-Title': "hexutils lib",
+                        'Implementation-Version': getVersionName()
+                )
+            }
+        }
+    }
+
+    sourceSets {
+        commonMain {
+            dependencies {
+
+            }
+        }
+
+        commonTest {
+            dependencies {
+                implementation kotlin('test-common')
+                implementation kotlin('test-annotations-common')
+            }
+        }
+
+        androidMain { }
+
+        androidTest {
+            dependencies {
+                implementation kotlin('test-junit')
+            }
+        }
+
+        jvmMain { }
+
+        jvmTest {
+            dependencies {
+                implementation kotlin('test-junit')
+            }
+        }
+    }
+}
+
+// ./gradlew clean jvmTest --tests com.ingonoka.grpclogging.server.LogServerKtTest.startServerWithClientAuthenticationOptionalAndWait
+//jvmTest {
+//    testLogging.showStandardStreams = false
+//}
