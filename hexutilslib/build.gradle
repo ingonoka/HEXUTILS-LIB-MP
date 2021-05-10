@@ -6,59 +6,33 @@
  * Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  *
  */
+buildscript {
+    apply from: '../../common-versions/versions/versions_own.gradle'
+    apply from: '../../common-versions/versions/versions_external.gradle'
+}
 
 plugins {
     id 'org.jetbrains.kotlin.multiplatform'
+    id 'com.android.library'
+    id 'maven-publish'
+    id 'org.asciidoctor.jvm.convert'
+    id 'com.jfrog.artifactory'
+    id 'org.jetbrains.dokka' version "$dokka_version"
 }
 
-apply plugin: 'com.android.library'
-apply plugin: 'org.jetbrains.dokka'
-apply plugin: 'com.jfrog.artifactory'
-apply plugin: 'org.asciidoctor.jvm.convert'
-apply plugin: 'maven-publish'
-
-repositories {
-    google()
-    jcenter()
-    mavenCentral()
-    maven {
-        url = 'https://dl.bintray.com/kotlin/kotlinx.html'
-    } // a dependency in the dokka gradle plugin
-    maven {
-        url = "https://dl.bintray.com/kotlin/kotlin-dev"
-    } // for dokka
-    maven {
-        allowInsecureProtocol = true
-        url "http://209.97.175.64:8081/artifactory/libs-release-local"
-        credentials {
-            username = artifactory_user
-            password = artifactory_password
-        }
-    }
-//    maven {
-//        name = "utilslibPackages"
-//        url = uri("https://maven.pkg.github.com/ingonoka/HEXUTILS-LIB-MP")
-//        credentials {
-//            username = "ingonoka"
-//            password = "b5c6a065568f3fbcff1d61c57dd76fbc5a3226f6"
-//        }
-//    }
-}
-
-version = getVersionName()
-group = domain
+apply from: '../../common-versions/versioning.gradle'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "30.0.0"
+    compileSdkVersion android_target_sdk_version.toInteger()
+    buildToolsVersion android_build_tools_version
 
     defaultConfig {
         minSdkVersion 23
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        targetSdkVersion android_target_sdk_version.toInteger()
+        versionCode=project.ext.versionCode
+        versionName=version
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
         null
     }
@@ -85,17 +59,6 @@ android {
     lintOptions {
         abortOnError false
         disable 'InvalidPackage' // prevent warning of invalid package javax.naming in BouncyCastle library
-        return void
-    }
-
-    packagingOptions {
-        exclude "META-INF/atomicfu.kotlin_module"
-        exclude "META-INF/kotlinx-io.kotlin_module"
-        exclude "META-INF/kotlinx-coroutines-core.kotlin_module"
-        exclude "META-INF/kotlinx-serialization-runtime.kotlin_module"
-        exclude "META-INF/kotlin-logging.kotlin_module"
-        exclude "META-INF/AL2.0"
-        exclude "META-INF/LGPL2.1"
         return void
     }
 
@@ -197,68 +160,32 @@ artifactory {
         }
     }
 }
-dokkaHtml {
-    outputDirectory = "$buildDir/dokka"
+
+tasks.named("dokkaHtml") {
+    outputDirectory = new File(buildDir, "dokka")
     dokkaSourceSets {
         jvmMain { // Or source set name, for single-platform the default source sets are `main` and `test`
-            moduleDisplayName = "HEXUTILS lib JVM"
+            moduleName.set("HEXUTILS lib JVM")
             // This name will be shown in the final output
-            displayName = "JVM"
+            displayName.set("JVM")
             // Platform used for code analysis. See the "Platforms" section of this readme
-            platform = "jvm"
-            // Specifies the location of the project source code on the Web.
-            // If provided, Dokka generates "source" links for each declaration.
-            // Repeat for multiple mappings
-            sourceLink {
-                // Unix based directory relative path to the root of the project (where you execute gradle respectively).
-                path = "hexutilslib/src/jvmMain/kotlin/" // or simply "./"
-
-                // URL showing where the source code can be accessed through the web browser
-                url = "https://github.com/ingonoka/hexutilslib/blob/master/hexutilslib/src/jvmMain/kotlin/"
-
-                // Suffix which is used to append the line number to the URL. Use #L for GitHub
-                lineSuffix = "#L"
-            }
+            platform.set(org.jetbrains.dokka.Platform.jvm)
         }
 
         androidMain { // Or source set name, for single-platform the default source sets are `main` and `test`
-            moduleDisplayName = "HEXUTILS lib JVM"
+            moduleName.set("HEXUTILS lib JVM")
             // This name will be shown in the final output
-            displayName = "Android"
+            displayName.set("Android")
             // Platform used for code analysis. See the "Platforms" section of this readme
-            platform = "android"
-            // Specifies the location of the project source code on the Web.
-            // If provided, Dokka generates "source" links for each declaration.
-            // Repeat for multiple mappings
-            sourceLink {
-                // Unix based directory relative path to the root of the project (where you execute gradle respectively).
-                path = "hexutilslib/src/main/java/" // or simply "./"
-
-                // URL showing where the source code can be accessed through the web browser
-                url = "https://github.com/ingonoka/hexutilslib/blob/master/hexutilslib/src/main/java/"
-
-                // Suffix which is used to append the line number to the URL. Use #L for GitHub
-                lineSuffix = "#L"
-            }
+//            platform.set(org.jetbrains.dokka.Platform.android)
         }
 
         commonMain {
-            moduleDisplayName = "BERTLV Light JVM"
+            moduleName.set("BERTLV Light JVM")
             // This name will be shown in the final output
-            displayName = "Common"
+            displayName.set("Common")
             // Platform used for code analysis. See the "Platforms" section of this readme
-            platform = "common"
-
-            sourceLink {
-                // Unix based directory relative path to the root of the project (where you execute gradle respectively).
-                path = "hexutilslib/src/commonMain/kotlin/" // or simply "./"
-
-                // URL showing where the source code can be accessed through the web browser
-                url = "https://github.com/ingonoka/hexutilslib/blob/master/hexutilslib/src/commonMain/kotlin/"
-
-                // Suffix which is used to append the line number to the URL. Use #L for GitHub
-                lineSuffix = "#L"
-            }
+//            platform = "common"
         }
     }
 }

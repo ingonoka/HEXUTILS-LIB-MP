@@ -1,5 +1,7 @@
-apply from: 'library_versions.gradle'
-apply from: 'library_versions_third_party.gradle'
+//apply from: './library_versions.gradle'
+//apply from: './library_versions_third_party.gradle'
+//apply from: '../common-versions/versions/versions_own.gradle' //library_versions.gradle'
+//apply from: '../common-versions/versions/versions_external.gradle' //library_versions_third_party.gradle'
 
 project.ext {
     domain = 'com.ingonoka'
