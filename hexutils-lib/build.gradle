@@ -130,7 +130,7 @@ android {
     defaultConfig {
         minSdkVersion 23
         targetSdkVersion android_target_sdk_version.toInteger()
-        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -142,9 +142,22 @@ android {
         }
     }
     sourceSets {
+        main {
+            manifest.srcFile 'src/androidMain/AndroidManifest.xml'
+            java.srcDirs = ['src/androidMain/kotlin']
+            res.srcDirs = ['src/androidMain/res']
+        }
         androidTest {
+            manifest.srcFile 'src/androidTest/AndroidManifest.xml'
             java.srcDirs = ['src/androidTest/kotlin']
             res.srcDirs = ['src/androidTest/res']
         }
     }
+
+    android {
+        packagingOptions {
+            exclude("META-INF/*.kotlin_module")
+        }
+    }
+
 }
