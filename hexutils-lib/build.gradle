@@ -94,7 +94,7 @@ kotlin {
 
 // ./gradlew clean jvmTest --tests com.ingonoka.grpclogging.server.LogServerKtTest.startServerWithClientAuthenticationOptionalAndWait
 jvmTest {
-    testLogging.showStandardStreams = true
+    testLogging.showStandardStreams = false
 }
 
 dependencies {
