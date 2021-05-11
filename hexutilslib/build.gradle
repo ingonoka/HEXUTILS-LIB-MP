@@ -1,0 +1,202 @@
+/*
+ * Copyright (c) 2020. Ingo Noka
+ * This file belongs to project HEXUTILS-LIB-MP.
+ * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter to
+ * Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+ *
+ */
+buildscript {
+    apply from: '../../common-versions/versions/versions_own.gradle'
+    apply from: '../../common-versions/versions/versions_external.gradle'
+}
+
+plugins {
+    id 'org.jetbrains.kotlin.multiplatform'
+    id 'com.android.library'
+    id 'maven-publish'
+    id 'org.asciidoctor.jvm.convert'
+    id 'com.jfrog.artifactory'
+    id 'org.jetbrains.dokka' version "$dokka_version"
+}
+
+apply from: '../../common-versions/versioning.gradle'
+
+android {
+    compileSdkVersion android_target_sdk_version.toInteger()
+    buildToolsVersion android_build_tools_version
+
+    defaultConfig {
+        minSdkVersion 23
+        targetSdkVersion android_target_sdk_version.toInteger()
+        versionCode=project.ext.versionCode
+        versionName=version
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+        null
+    }
+
+    buildTypes {
+        release {
+            matchingFallbacks = ['debug']
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            matchingFallbacks = ['release']
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+        return void
+    }
+
+    lintOptions {
+        abortOnError false
+        disable 'InvalidPackage' // prevent warning of invalid package javax.naming in BouncyCastle library
+        return void
+    }
+
+    null
+}
+
+dependencies {
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+
+kotlin {
+    jvm {
+        compilations.main.kotlinOptions {
+            jvmTarget = "1.8"
+        }
+        compilations.test.kotlinOptions {
+            jvmTarget = "1.8"
+        }
+        jvmJar {
+            manifest {
+                attributes('Implementation-Title': "hexutilslib",
+                        'Implementation-Version': getVersionName())
+            }
+        }
+    }
+
+    android {
+        publishLibraryVariants("release", "debug")
+    }
+
+    sourceSets {
+        commonTest {
+            dependencies {
+                implementation kotlin('test-common')
+                implementation kotlin('test-annotations-common')
+            }
+        }
+        jvmTest {
+            dependencies {
+                implementation kotlin('test-junit')
+            }
+        }
+        androidTest {
+            dependencies {
+                implementation kotlin('test-junit')
+            }
+        }
+    }
+}
+
+publishing {
+    publications.all {
+        pom {
+            name = 'HEXUTILS Library'
+            description = 'A library for converting byte arrays to hex strings'
+            licenses {
+                license {
+                    name = pom_licenseName
+                    url = pom_licenseUrl
+                }
+            }
+            developers { developer { name = pom_developer } }
+        }
+    }
+
+    repositories {
+        // tag::mavenRepository[]
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/ingonoka/HEXUTILS-LIB-MP")
+            credentials {
+                username = github_username
+                password = github_password
+            }
+        }
+        // end::mavenRepository[]
+    }
+}
+
+artifactory {
+    contextUrl = 'http://209.97.175.64:8081/artifactory'
+    publish {
+        repository {
+            repoKey = artifactory_repokey
+            username = artifactory_user
+            password = artifactory_password
+        }
+
+        defaults {
+            publishArtifacts = true
+            publications(publishing.publications.names.toArray())
+        }
+    }
+}
+
+tasks.named("dokkaHtml") {
+    outputDirectory = new File(buildDir, "dokka")
+    dokkaSourceSets {
+        jvmMain { // Or source set name, for single-platform the default source sets are `main` and `test`
+            moduleName.set("HEXUTILS lib JVM")
+            // This name will be shown in the final output
+            displayName.set("JVM")
+            // Platform used for code analysis. See the "Platforms" section of this readme
+            platform.set(org.jetbrains.dokka.Platform.jvm)
+        }
+
+        androidMain { // Or source set name, for single-platform the default source sets are `main` and `test`
+            moduleName.set("HEXUTILS lib JVM")
+            // This name will be shown in the final output
+            displayName.set("Android")
+            // Platform used for code analysis. See the "Platforms" section of this readme
+//            platform.set(org.jetbrains.dokka.Platform.android)
+        }
+
+        commonMain {
+            moduleName.set("BERTLV Light JVM")
+            // This name will be shown in the final output
+            displayName.set("Common")
+            // Platform used for code analysis. See the "Platforms" section of this readme
+//            platform = "common"
+        }
+    }
+}
+
+asciidoctor {
+    baseDirFollowsSourceDir()
+    sourceDir file('doc')
+    outputDir file('build/docs')
+
+    asciidoctorj {
+        attributes 'source-highlighter': 'rouge'
+        attributes 'library-version': getVersionName()
+    }
+}

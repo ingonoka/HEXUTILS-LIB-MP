@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2020. Ingo Noka
  * This file belongs to project HEXUTILS-LIB-MP.
@@ -6,6 +7,7 @@
  * Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  *
  */
+
 
 buildscript{
     apply from: '../common-versions/versions/versions_external.gradle'
@@ -16,7 +18,6 @@ buildscript{
     dependencies {
         classpath 'com.android.tools.build:gradle:4.0.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}"
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokka_version"
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:$artifactory_version"
         classpath "org.asciidoctor:asciidoctor-gradle-jvm:$asciidoctor_version"
     }
@@ -29,4 +30,4 @@ plugins {
     id 'org.asciidoctor.jvm.convert' version "$asciidoctor_version"
 }
 
-//apply from: '../common-versions/versioning.gradle'
+apply from: '../common-versions/versioning.gradle'
