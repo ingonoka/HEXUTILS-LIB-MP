@@ -58,6 +58,24 @@ class StringExtKtTestJvm {
     }
 
     @Test
+    fun hexToListOfInt() {
+
+        assertEquals(listOf(0, 1, 127), "00017F".hexToListOfInt())
+        assertEquals(listOf(0, 1, 127), "00017f".hexToListOfInt())
+        assertEquals(listOf(0x80, 0xFF), "80FF".hexToListOfInt())
+        assertEquals(listOf(0x80, 0xFF), "80ff".hexToListOfInt())
+        assertEquals(listOf(0x80, 0xFF), "80Ff".hexToListOfInt())
+        assertEquals(listOf(0x80, 0xFF), "80fF".hexToListOfInt())
+
+        assertTrue(assertThrown(IllegalArgumentException::class) { "1".hexToListOfInt() })
+
+        assertEquals(listOf(), "".hexToListOfInt())
+
+        assertEquals(listOf(0x5F, 0xFF, 0xFF, 0xFF), "0x5F, 0xFF, 0xFF, 0xFF".hexToListOfInt(true))
+
+    }
+
+    @Test
     fun hexToByte() {
         assertEquals(1.toByte(), "01".hexToByte())
         assertEquals(1.toByte(), "1".hexToByte())

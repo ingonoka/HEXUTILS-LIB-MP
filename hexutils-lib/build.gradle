@@ -185,7 +185,7 @@ tasks.named("dokkaHtml") {
         }
 
         commonMain {
-            moduleName.set("BERTLV Light JVM")
+            moduleName.set("HEXUTILS JVM")
             // This name will be shown in the final output
             displayName.set("Common")
             // Platform used for code analysis. See the "Platforms" section of this readme

@@ -29,23 +29,28 @@ fun String.hexToBytes(removeSpace: Boolean = false): ByteArray {
 
     val res = ByteArray(hexNoSpace.length / 2)
 
-    require (hexNoSpace.length % 2 == 0) { "Only conversion of strings with even length supported: $this" }
+    require(hexNoSpace.length % 2 == 0) { "Only conversion of strings with even length supported: $this" }
 
 //    hexNoSpace.chunked(2).forEachIndexed { i, chunk -> res[i] = hexMap[chunk]!! }
 
     var i = 0
-    while(i * 2 < hexNoSpace.length) {
-        res[i] = hexMap[hexNoSpace.substring(i*2, (i*2)+2)]!!
+    while (i * 2 < hexNoSpace.length) {
+        res[i] = hexMap[hexNoSpace.substring(i * 2, (i * 2) + 2)]!!
         i++
     }
     return res
 }
 
 /**
- * Create a [Byte] from a string of two Hex characters
+ * Create a list of integers from a string of Hex characters
  *
- * @throws NumberFormatException  if the number of characters is less than 2 or one of the characters is not
- * a hex character
+ * @see hexToBytes
+ */
+fun String.hexToListOfInt(removeSpace: Boolean = false): List<Int> = hexToBytes(removeSpace).map { it.toInt() and 0xFF }
+
+/**
+ * Create a [Byte] from a string of one or two Hex characters
+ *
  *
  */
 fun String.hexToByte(): Byte = hexMap[this]!!

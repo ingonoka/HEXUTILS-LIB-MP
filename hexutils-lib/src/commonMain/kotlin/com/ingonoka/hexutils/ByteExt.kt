@@ -33,3 +33,9 @@ val hex = listOf(
  * Converts a Byte into a hex string. [prefix] is prepended if provided
  */
 fun Byte.toHex(prefix: String = "") = "$prefix${hex[(this.toInt() and 0xFF)]}"
+
+/**
+ * Converts an Int into a hex string. [prefix] is prepended if provided
+ */
+fun Int.toHex(prefix: String = "") = "$prefix${hex[(this and 0xFF)]}"
+
