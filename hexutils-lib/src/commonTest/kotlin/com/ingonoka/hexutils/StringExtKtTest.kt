@@ -62,16 +62,20 @@ class StringExtKtTestJvm {
 
         assertEquals(listOf(0, 1, 127), "00017F".hexToListOfInt())
         assertEquals(listOf(0, 1, 127), "00017f".hexToListOfInt())
-        assertEquals(listOf(0x80, 0xFF), "80FF".hexToListOfInt())
-        assertEquals(listOf(0x80, 0xFF), "80ff".hexToListOfInt())
-        assertEquals(listOf(0x80, 0xFF), "80Ff".hexToListOfInt())
-        assertEquals(listOf(0x80, 0xFF), "80fF".hexToListOfInt())
+
+        val loi = "80FF".hexToListOfInt()
+        assertEquals(listOf(-128, -1), loi)
+        assertArrayEquals(byteArrayOf(-128, -1), loi.map { it.toByte() }.toByteArray())
+
+        assertEquals(listOf(-128, -1), "80ff".hexToListOfInt())
+        assertEquals(listOf(-128, -1), "80Ff".hexToListOfInt())
+        assertEquals(listOf(-128, -1), "80fF".hexToListOfInt())
 
         assertTrue(assertThrown(IllegalArgumentException::class) { "1".hexToListOfInt() })
 
         assertEquals(listOf(), "".hexToListOfInt())
 
-        assertEquals(listOf(0x5F, 0xFF, 0xFF, 0xFF), "0x5F, 0xFF, 0xFF, 0xFF".hexToListOfInt(true))
+        assertEquals(listOf(0x5F, -1, -1, -1), "0x5F, 0xFF, 0xFF, 0xFF".hexToListOfInt(true))
 
     }
 

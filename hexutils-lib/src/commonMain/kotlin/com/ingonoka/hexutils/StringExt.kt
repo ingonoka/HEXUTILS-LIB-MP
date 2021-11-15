@@ -46,7 +46,7 @@ fun String.hexToBytes(removeSpace: Boolean = false): ByteArray {
  *
  * @see hexToBytes
  */
-fun String.hexToListOfInt(removeSpace: Boolean = false): List<Int> = hexToBytes(removeSpace).map { it.toInt() and 0xFF }
+fun String.hexToListOfInt(removeSpace: Boolean = false): List<Int> = hexToBytes(removeSpace).map { it.toInt() }
 
 /**
  * Create a [Byte] from a string of one or two Hex characters

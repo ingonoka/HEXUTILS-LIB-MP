@@ -77,7 +77,7 @@ fun List<Int>.toHexChunked(indent: String = "", columns: Int = 16, lineNums: Boo
                 if (printable && list.size < columns) repeat(columns - list.size) {
                     append("   ")
                 }
-                
+
                 if (printable) {
                     append("    ")
 
