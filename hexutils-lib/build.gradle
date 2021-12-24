@@ -6,6 +6,9 @@
  * Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  *
  */
+
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+
 buildscript {
     apply from: '../../common-versions/versions/versions_own.gradle'
     apply from: '../../common-versions/versions/versions_external.gradle'
@@ -27,7 +30,7 @@ android {
     buildToolsVersion android_build_tools_version
 
     defaultConfig {
-        minSdkVersion 23
+        minSdkVersion android_min_sdk_version.toInteger()
         targetSdkVersion android_target_sdk_version.toInteger()
         versionCode=project.ext.versionCode
         versionName=version
@@ -70,7 +73,11 @@ android {
 }
 
 dependencies {
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation "androidx.test:runner:1.4.0"
+    androidTestImplementation "androidx.test:rules:1.4.0"
+//    implementation "androidx.core:core-ktx:1.7.0"
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+//    androidTestImplementation 'com.android.support.test:runner:1.0.2'
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
@@ -79,6 +86,15 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     }
 }
 
+allprojects {
+    afterEvaluate {
+        // Remove log pollution until Android support in KMP improves.
+        KotlinMultiplatformExtension kmpExt = project.extensions.findByType(KotlinMultiplatformExtension.class)
+        kmpExt.sourceSets.removeAll {
+            it.name == "androidAndroidTestRelease"
+        }
+    }
+}
 
 kotlin {
     jvm {
@@ -203,4 +219,7 @@ asciidoctor {
         attributes 'source-highlighter': 'rouge'
         attributes 'library-version': getVersionName()
     }
+}
+repositories {
+    mavenCentral()
 }
