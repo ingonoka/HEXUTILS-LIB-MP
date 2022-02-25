@@ -115,5 +115,11 @@ class StringExtKtTestJvm {
             }
         }
     }
+
+    @Test
+    fun testIsHex() {
+        assertTrue("1234567890ABCDEFabcdef".isHex())
+        assertTrue("".isHex())
+    }
 }
 

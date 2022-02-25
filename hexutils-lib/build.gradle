@@ -73,11 +73,9 @@ android {
 }
 
 dependencies {
+    implementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test:runner:1.4.0"
     androidTestImplementation "androidx.test:rules:1.4.0"
-//    implementation "androidx.core:core-ktx:1.7.0"
-//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-//    androidTestImplementation 'com.android.support.test:runner:1.0.2'
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
@@ -119,19 +117,19 @@ kotlin {
     sourceSets {
         commonTest {
             dependencies {
-                implementation kotlin('test-common')
-                implementation kotlin('test-annotations-common')
+                implementation kotlin('test')
+//                implementation kotlin('test-annotations')
             }
         }
         jvmTest {
-            dependencies {
-                implementation kotlin('test-junit')
-            }
+//            dependencies {
+//                implementation 'junit:junit:4.13.1'
+//            }
         }
         androidTest {
-            dependencies {
-                implementation kotlin('test-junit')
-            }
+//            dependencies {
+//                implementation 'junit:junit:4.13.1'
+//            }
         }
     }
 }

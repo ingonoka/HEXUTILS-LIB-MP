@@ -12,7 +12,6 @@ package com.ingonoka.hexutils
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-
 class ByteArrayExtKtTest {
 
     @Test

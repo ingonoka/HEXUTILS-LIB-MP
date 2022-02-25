@@ -10,6 +10,11 @@
 package com.ingonoka.hexutils
 
 /**
+ * Check whether every character in String is a hex character
+ */
+fun String.isHex(): Boolean = this.all { it.isHex() }
+
+/**
  * Create a [ByteArray] from a string of Hex characters
  *
  * The following characters and character sequences will be removed before the string is converted:
@@ -59,7 +64,7 @@ val hexMap = hashMapOf<String, Byte>(
     "0" to 0, "1" to 1, "2" to 2, "3" to 3, "4" to 4, "5" to 5, "6" to 6, "7" to 7, "8" to 8, "9" to 9,
     "A" to 10, "B" to 11, "C" to 12, "D" to 13, "E" to 14, "F" to 15,
     "a" to 10, "b" to 11, "c" to 12, "d" to 13, "e" to 14, "f" to 15,
-    
+
     "00" to 0, "01" to 1, "02" to 2, "03" to 3, "04" to 4, "05" to 5, "06" to 6, "07" to 7, "08" to 8, "09" to 9,
     "0A" to 10, "0B" to 11, "0C" to 12, "0D" to 13, "0E" to 14, "0F" to 15,
     "0a" to 10, "0b" to 11, "0c" to 12, "0d" to 13, "0e" to 14, "0f" to 15,
