@@ -148,36 +148,23 @@ publishing {
             developers { developer { name = pom_developer } }
         }
     }
-
-    repositories {
-        // tag::mavenRepository[]
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/ingonoka/HEXUTILS-LIB-MP")
-            credentials {
-                username = github_username
-                password = github_password
-            }
-        }
-        // end::mavenRepository[]
-    }
 }
 
-artifactory {
-    contextUrl = 'http://209.97.175.64:8081/artifactory'
-    publish {
-        repository {
-            repoKey = artifactory_repokey
-            username = artifactory_user
-            password = artifactory_password
-        }
-
-        defaults {
-            publishArtifacts = true
-            publications(publishing.publications.names.toArray())
-        }
-    }
-}
+//artifactory {
+//    contextUrl = 'http://209.97.175.64:8081/artifactory'
+//    publish {
+//        repository {
+//            repoKey = artifactory_repokey
+//            username = artifactory_user
+//            password = artifactory_password
+//        }
+//
+//        defaults {
+//            publishArtifacts = true
+//            publications(publishing.publications.names.toArray())
+//        }
+//    }
+//}
 
 tasks.named("dokkaHtml") {
     outputDirectory = new File(buildDir, "dokka")
