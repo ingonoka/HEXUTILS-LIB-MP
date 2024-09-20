@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2021. Ingo Noka
+ * Copyright (c) 2024. Ingo Noka
  * This file belongs to project hexutils-mp.
  * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
- * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter to
+ * To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/4.0/ or send a letter to
  * Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  *
  */
@@ -47,6 +47,7 @@ class StringExtKtTestJvm {
         assertTrue { assertArrayEquals(byteArrayOf(-128, -1), "80fF".hexToBytes()) }
 
         assertTrue(assertThrown(IllegalArgumentException::class) { "1".hexToBytes() })
+        assertTrue(assertThrown(NumberFormatException::class) { "0k".hexToBytes() })
 
         assertTrue { assertArrayEquals(byteArrayOf(), "".hexToBytes()) }
 
@@ -54,7 +55,6 @@ class StringExtKtTestJvm {
             byteArrayOf(0x5F, 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte()),
             "0x5F, 0xFF, 0xFF, 0xFF".hexToBytes(true)
         )
-
     }
 
     @Test

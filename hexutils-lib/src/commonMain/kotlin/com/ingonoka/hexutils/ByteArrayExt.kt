@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2021. Ingo Noka
+ * Copyright (c) 2024. Ingo Noka
  * This file belongs to project hexutils-mp.
  * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
- * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter to
+ * To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/4.0/ or send a letter to
  * Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  *
  */
@@ -13,7 +13,8 @@
 package com.ingonoka.hexutils
 
 /**
- * Convert [ByteArray] into string of hex characters.  Each Byte is separated by ", " and prefixed with "0x"
+ * Convert [ByteArray] into string of hex characters.
+ * Each Byte is separated by `, ` and prefixed with "0x"
  *
  * ```
  * brackets = true: [ 0x01, 0x02 ]
@@ -32,7 +33,7 @@ fun ByteArray.toHex(brackets: Boolean = false): String =
     ) { b -> b.toHex("0x") }
 
 /**
- * Convert [ByteArray] into string of hex characters.  Each Byte is separated by " ": `01 02 03`
+ * Convert [ByteArray] into string of hex characters.  Each Byte is separated by ' '': `01 02 03`
  */
 fun ByteArray.toHexShort(): String = this.joinToString(separator = " ") { b ->
     b.toHex()

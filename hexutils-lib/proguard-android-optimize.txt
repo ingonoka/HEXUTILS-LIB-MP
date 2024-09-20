@@ -1,0 +1,9 @@
+-keep class kotlin.Metadata
+
+-dontwarn java.lang.invoke.StringConcatFactory
+
+-keep public class com.ingonoka.hexutils.ByteArrayExtKt { *; }
+-keep public class com.ingonoka.hexutils.ByteExtKt { *; }
+-keep public class com.ingonoka.hexutils.CharExtKt { *; }
+-keep public class com.ingonoka.hexutils.IntListExtKt { *; }
+-keep public class com.ingonoka.hexutils.StringExtKt { *; }

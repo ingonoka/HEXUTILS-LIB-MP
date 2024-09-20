@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2021. Ingo Noka
+ * Copyright (c) 2024. Ingo Noka
  * This file belongs to project hexutils-mp.
  * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
- * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter to
+ * To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/4.0/ or send a letter to
  * Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  *
  */
@@ -26,7 +26,8 @@ fun String.isHex(): Boolean = this.all { it.isHex() }
  *
  * @return The [ByteArray]
  *
- * @Throws NumberFormatException if any character is not a hex character or the number of hex characters is less than 2 or the number of characters is not even
+ * @Throws IllegalArgumentException If the number of hex characters is less than 2 or the number of characters is not even
+ * @Throws NoSuchElementException if any character is not a hex character
  */
 fun String.hexToBytes(removeSpace: Boolean = false): ByteArray {
 
@@ -36,15 +37,14 @@ fun String.hexToBytes(removeSpace: Boolean = false): ByteArray {
 
     require(hexNoSpace.length % 2 == 0) { "Only conversion of strings with even length supported: $this" }
 
-//    hexNoSpace.chunked(2).forEachIndexed { i, chunk -> res[i] = hexMap[chunk]!! }
-
     var i = 0
-    while (i * 2 < hexNoSpace.length) {
-        res[i] = hexMap[hexNoSpace.substring(i * 2, (i * 2) + 2)]!!
-        i++
+    hexNoSpace.chunked(2) {
+        res[i++] = hexMap[it] ?: throw NumberFormatException("Not a hex character: $it")
     }
+
     return res
 }
+
 
 /**
  * Create a list of integers from a string of Hex characters
