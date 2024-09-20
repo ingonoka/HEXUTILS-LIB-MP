@@ -7,6 +7,7 @@
  *
  */
 
+import org.asciidoctor.gradle.jvm.AsciidoctorTask
 import java.io.ByteArrayOutputStream
 
 /*
@@ -41,7 +42,7 @@ plugins {
     //trick: for the same plugin versions in all submodules
     alias(libs.plugins.androidLibrary).apply(false)
     alias(libs.plugins.kotlinMultiplatform).apply(false)
-    alias(libs.plugins.asciiDocGradlePlugin).apply(false)
+    alias(libs.plugins.asciiDocGradlePlugin)
 }
 
 /**
@@ -59,4 +60,20 @@ fun getVersionName(): String = try {
 } catch (e: Exception) {
     println(e.message)
     "na"
+}
+
+tasks {
+    "asciidoctor"(AsciidoctorTask::class) {
+        baseDirFollowsSourceDir()
+        sourceDir(file("doc"))
+        setOutputDir(file("build/docs"))
+        asciidoctorj {
+            attributes(
+                mapOf(
+                    "source-highlighter" to "rouge",
+                    "library-version" to project.version
+                )
+            )
+        }
+    }
 }

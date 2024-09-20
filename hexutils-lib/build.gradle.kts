@@ -8,14 +8,12 @@
  */
 
 
-import org.asciidoctor.gradle.jvm.AsciidoctorTask
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.mavenPublish)
-    alias(libs.plugins.asciiDocGradlePlugin)
     alias(libs.plugins.dokkaGradlePlugin)
 }
 
@@ -127,22 +125,6 @@ tasks.dokkaHtml.configure {
             displayName = "Common"
         }
 
-    }
-}
-
-tasks {
-    "asciidoctor"(AsciidoctorTask::class) {
-        baseDirFollowsSourceDir()
-        sourceDir(file("doc"))
-        setOutputDir(file("build/docs"))
-        asciidoctorj {
-            attributes(
-                mapOf(
-                    "source-highlighter" to "rouge",
-                    "library-version" to project.version
-                )
-            )
-        }
     }
 }
 
